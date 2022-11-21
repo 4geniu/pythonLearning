@@ -13,6 +13,7 @@ class Player:
   visionL = 0
   visionR = 0
   rotation = 0.0
+  height = 0
   x = 0
   y = 0
   def __init__(self,x,y,rotation):
@@ -20,6 +21,7 @@ class Player:
     self.y = y
     self.rotation = rotation
     self.calcVision()
+    self.height = 0.1
     
   def getRotation(self):
     return math.radians(self.rotation)
@@ -42,6 +44,13 @@ class Player:
   def rotateLeft(self):
     self.rotation+=5.0
 
+  def viewUp(self):
+    self.height+=0.05
+  
+  def viewDown(self):
+    self.height-=0.05
+
+
   def calcVision(self):
     radianL = math.radians(self.rotation+self.viewRange)
     radianR = math.radians(self.rotation-self.viewRange)
@@ -49,8 +58,8 @@ class Player:
     self.visionR = vec2(math.cos(radianR),math.sin(radianR))
 
   def getSVector(self,h,v):
-    x = (1-h)*0.1/(v-1.01)*self.visionL.x + h*0.1/(v-1.01)*self.visionR.x
-    y = (1-h)*0.1/(v-1.01)*self.visionL.y + h*0.1/(v-1.01)*self.visionR.y
+    x = (1-h)*self.height/(v-1.01)*self.visionL.x + h*self.height/(v-1.01)*self.visionR.x
+    y = (1-h)*self.height/(v-1.01)*self.visionL.y + h*self.height/(v-1.01)*self.visionR.y
 
     return vec2(x,y)
     
@@ -130,10 +139,14 @@ def main():
           player.moveUp()
         if event.key == K_s:
           player.moveDown()
-        if event.key == K_i:
+        if event.key == K_j:
           player.rotateRight()
-        if event.key == K_p:
+        if event.key == K_l:
           player.rotateLeft()
+        if event.key == K_i:
+          player.viewUp()
+        if event.key == K_k:
+          player.viewDown()
 
     player.calcVision()
 
@@ -168,13 +181,15 @@ def main():
         color = screen.get_at((int(pos.x),int(pos.y)))
         if color.r == 255 and color.g == 255 and color.b == 255:
           pos2 = vec2.getPVector(h/50,v/50)
-          print(f"pos2( {pos2.x} , {pos2.y} )")
+          #print(f"pos2( {pos2.x} , {pos2.y} )")
           pg.draw.rect(screen,(255,255,255),(SCREEN_SIZE[0]-pos2.x,SCREEN_SIZE[1]-pos2.y,int(SCREEN_SIZE[0]/50),int(SCREEN_SIZE[1]/50)))
 
 
-        pg.draw.circle(screen,(255,0,0),(pos.x,pos.y),1.0)
+        #pg.draw.circle(screen,(255,0,0),(pos.x,pos.y),1.0)
 
     pg.draw.circle(screen,(0,255,0),(player.x,player.y),10.0)
+    rad = math.radians(player.rotation)
+    pg.draw.line(screen,(0,0,255),(player.x,player.y),(player.x-math.cos(rad)*10,player.y-math.sin(rad)*10))
 
 
     pg.display.update()
