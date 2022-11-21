@@ -156,9 +156,9 @@ def main():
       pg.draw.line(screen,(255,0,0),(pos1.x,pos1.y),(pos2.x,pos2.y))
     """
 
-    for v in range(0,16):
-      for h in range(0,16):
-        pos = player.getSVector(h/15,v/15).mult(200).add(player.x,player.y)
+    for v in range(0,51):
+      for h in range(0,51):
+        pos = player.getSVector(h/50,v/50).mult(200).add(player.x,player.y)
 
         if SCREEN_SIZE[0] <= pos.x or SCREEN_SIZE[1] <= pos.y:
           continue
@@ -167,9 +167,9 @@ def main():
 
         color = screen.get_at((int(pos.x),int(pos.y)))
         if color.r == 255 and color.g == 255 and color.b == 255:
-          pos2 = vec2.getPVector(h/15,v/15)
+          pos2 = vec2.getPVector(h/50,v/50)
           print(f"pos2( {pos2.x} , {pos2.y} )")
-          pg.draw.rect(screen,(255,255,255),(SCREEN_SIZE[0]-pos2.x,SCREEN_SIZE[1]-pos2.y,int(SCREEN_SIZE[0]/15),int(SCREEN_SIZE[1]/15)))
+          pg.draw.rect(screen,(255,255,255),(SCREEN_SIZE[0]-pos2.x,SCREEN_SIZE[1]-pos2.y,int(SCREEN_SIZE[0]/50),int(SCREEN_SIZE[1]/50)))
 
 
         pg.draw.circle(screen,(255,0,0),(pos.x,pos.y),1.0)
